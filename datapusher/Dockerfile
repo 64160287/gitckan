@@ -2,7 +2,7 @@ FROM alpine:3.7
 
 ENV APP_DIR=/srv/app
 ENV GIT_BRANCH master
-ENV GIT_URL https://github.com/ckan/datapusher.git
+ENV GIT_URL https://gitlab.nectec.or.th/opend/datapusher.git
 ENV JOB_CONFIG ${APP_DIR}/datapusher_settings.py
 
 WORKDIR ${APP_DIR}
