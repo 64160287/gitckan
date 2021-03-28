@@ -20,7 +20,7 @@ services:
     env_file:
       - .env
     environment:
-      - CKAN_SITE_URL=${DEFAULT_URL}:${NGINX_PORT}
+      - CKAN_SITE_URL=${DEFAULT_URL}
     links:
       - db
       - solr
