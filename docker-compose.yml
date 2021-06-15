@@ -21,6 +21,10 @@ services:
       - .env
     environment:
       - CKAN_SITE_URL=${DEFAULT_URL}
+      - CKAN_SQLALCHEMY_URL=postgresql://ckan:${POSTGRES_PASSWORD}@db/ckan
+      - CKAN_DATASTORE_WRITE_URL=postgresql://ckan:${POSTGRES_PASSWORD}@db/datastore
+      - CKAN_DATASTORE_READ_URL=postgresql://datastore_ro:${DATASTORE_READONLY_PASSWORD}@db/datastore
+      - CKANEXT__XLOADER__JOBS_DB__URI=postgresql://ckan:${POSTGRES_PASSWORD}@db/ckan
     links:
       - db
       - solr
