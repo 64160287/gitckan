@@ -4,6 +4,7 @@ services:
 
   nginx:
     container_name: nginx${PROJECT_NUMBER}
+    restart: unless-stopped
     build:
       context: nginx/
       dockerfile: Dockerfile
@@ -16,7 +17,8 @@ services:
     
   ckan:
     container_name: ckan${PROJECT_NUMBER}
-    image: thepaeth/ckan-thai_gdc:ckan-${CKAN_VERSION}-xloader
+    restart: unless-stopped
+    image: thepaeth/ckan-thai_gdc
     env_file:
       - .env
     environment:
@@ -34,6 +36,7 @@ services:
 
   db:
     container_name: db-${PROJECT_NUMBER}
+    restart: unless-stopped
     build:
       context: postgresql/
       args:
@@ -46,21 +49,26 @@ services:
       - TZ=${TZ}
     volumes:
       - pg_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "${POSTGRES_USER:-ckan}", "-d", "${POSTGRES_DB:-ckan}"]
      
   solr:
     container_name: solr${PROJECT_NUMBER}
-    build:
-      context: solr/
-      args:
-        - CKAN_VERSION=${CKAN_VERSION}
+    image: ckan/ckan-solr:2.9-solr8
+    restart: unless-stopped
     volumes:
-      - solr_data:/opt/solr/server/solr/ckan/data/index
+      - solr_data:/var/solr
     environment:
       - TZ=${TZ}
+    healthcheck:
+      test: ["CMD", "wget", "-qO", "/dev/null", "http://localhost:8983/solr/"]
 
   redis:
     container_name: redis${PROJECT_NUMBER}
     image: redis:alpine
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "-e", "QUIT"]
 
 volumes:
   ckan_storage:
