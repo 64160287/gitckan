@@ -18,7 +18,7 @@ services:
   ckan:
     container_name: ckan${PROJECT_NUMBER}
     restart: unless-stopped
-    image: thepaeth/ckan-thai_gdc
+    image: thepaeth/ckan-thai_gdc:ckan-2.9-xloader
     env_file:
       - .env
     environment:
